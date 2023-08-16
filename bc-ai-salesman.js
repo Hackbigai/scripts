@@ -1,10 +1,10 @@
-<script>
-    // bc-ai-salesman.js
-    console.log('inject chat bot .js')
-    // Function to inject the chatbot UI HTML and CSS
-    function injectChatbotUI() {
-        const chatbotStyle = document.createElement("style");
-        chatbotStyle.innerHTML = `
+
+// bc-ai-salesman.js
+console.log('inject chat bot')
+// Function to inject the chatbot UI HTML and CSS
+function injectChatbotUI() {
+    const chatbotStyle = document.createElement("style");
+    chatbotStyle.innerHTML = `
     /* Add your CSS code here */
   <style>
     /* The chat UI wrapper */
@@ -225,8 +225,8 @@
   </style>
   `;
 
-        const chatbotDiv = document.createElement("div");
-        chatbotDiv.innerHTML = `
+    const chatbotDiv = document.createElement("div");
+    chatbotDiv.innerHTML = `
     <!-- Add your HTML code here -->
 <button id="chatBotButton" onclick="openChatUI()" style="position: fixed; bottom: 20px; right: 20px; background: linear-gradient(140deg, #282ddc 0%, #03bffd 100%); color: white; padding: 8px; border-radius: 8px; z-index: 9999;">
     Chat With Acme AI Salesman
@@ -267,110 +267,109 @@
     </form>
 </div>`;
 
-        document.head.appendChild(chatbotStyle);
-        document.body.appendChild(chatbotDiv);
+    document.head.appendChild(chatbotStyle);
+    document.body.appendChild(chatbotDiv);
 
-        const form = document.querySelector('#chat-form');
-        const chatInput = document.querySelector('#chat-input');
-        var isLoadingMessage = false;
+    const form = document.querySelector('#chat-form');
+    const chatInput = document.querySelector('#chat-input');
+    var isLoadingMessage = false;
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            if (isLoadingMessage) return
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (isLoadingMessage) return
 
-            isLoadingMessage = true;
-            const messageLoading = document.querySelector('#messageLoading');
-            const sendButton = document.querySelector('#sendbutton');
-            messageLoading.style.display = "block"
-            sendButton.style.display = "none"
+        isLoadingMessage = true;
+        const messageLoading = document.querySelector('#messageLoading');
+        const sendButton = document.querySelector('#sendbutton');
+        messageLoading.style.display = "block"
+        sendButton.style.display = "none"
 
-            const message = chatInput.value;
-            chatInput.value = '';
-            storeTheMessagesToLocalStorage(message, "user")
-            appendMessage(message, "user");
-
-
-            // Prepare the body
-            var body = {
-                url: window.location.href,
-                chat: getTheMessagesFromLocalStorage()
-            }
-
-            // Send the request
-            // fetch('https://cors-anywhere.herokuapp.com/https://6336-2409-40f3-22-f857-d98-4ea3-832e-77ef.ngrok-free.app/api/chat', {
-            fetch('https://bc-ai-foundation.vercel.app/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-                .then(async (response) => response.json())
-                .then(result => {
-                    isLoadingMessage = false
-                    messageLoading.style.display = "none"
-                    sendButton.style.display = "block"
-
-                    storeTheMessagesToLocalStorage(result.replay, "AI-Salesman")
-                    appendMessage(result.replay, "AI-Salesman")
-                })
-                .catch(error => {
-                    console.log('error', error)
-
-                    isLoadingMessage = false
-                    messageLoading.style.display = "none"
-                    sendButton.style.display = "block"
-                });
-
-        });
-
-    }
+        const message = chatInput.value;
+        chatInput.value = '';
+        storeTheMessagesToLocalStorage(message, "user")
+        appendMessage(message, "user");
 
 
-    function openChatUI() {
-        const chatUi = document.getElementById("chatUi");
-        const chatbotButton = document.getElementById("chatBotButton");
-
-        chatUi.style.display = "block"
-        chatbotButton.style.display = "none"
-    }
-
-    function closeChatUI() {
-        const chatUi = document.getElementById("chatUi");
-        const chatbotButton = document.getElementById("chatBotButton");
-
-        chatUi.style.display = "none"
-        chatbotButton.style.display = "block"
-    }
-
-    function appendMessage(message, author = "AI-Salesman") {
-
-        const isRightSide = author == "user";
-
-        const messageElement = document.createElement('div');
-        messageElement.className = "message"
-        if (isRightSide) {
-            messageElement.style.flexDirection = "row-reverse"
+        // Prepare the body
+        var body = {
+            url: window.location.href,
+            chat: getTheMessagesFromLocalStorage()
         }
 
-        messageElement.innerHTML = `<div class="profile"></div>
+        // Send the request
+        // fetch('https://cors-anywhere.herokuapp.com/https://6336-2409-40f3-22-f857-d98-4ea3-832e-77ef.ngrok-free.app/api/chat', {
+        fetch('https://bc-ai-foundation.vercel.app/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+            .then(async (response) => response.json())
+            .then(result => {
+                isLoadingMessage = false
+                messageLoading.style.display = "none"
+                sendButton.style.display = "block"
+
+                storeTheMessagesToLocalStorage(result.replay, "AI-Salesman")
+                appendMessage(result.replay, "AI-Salesman")
+            })
+            .catch(error => {
+                console.log('error', error)
+
+                isLoadingMessage = false
+                messageLoading.style.display = "none"
+                sendButton.style.display = "block"
+            });
+
+    });
+
+}
+
+
+function openChatUI() {
+    const chatUi = document.getElementById("chatUi");
+    const chatbotButton = document.getElementById("chatBotButton");
+
+    chatUi.style.display = "block"
+    chatbotButton.style.display = "none"
+}
+
+function closeChatUI() {
+    const chatUi = document.getElementById("chatUi");
+    const chatbotButton = document.getElementById("chatBotButton");
+
+    chatUi.style.display = "none"
+    chatbotButton.style.display = "block"
+}
+
+function appendMessage(message, author = "AI-Salesman") {
+
+    const isRightSide = author == "user";
+
+    const messageElement = document.createElement('div');
+    messageElement.className = "message"
+    if (isRightSide) {
+        messageElement.style.flexDirection = "row-reverse"
+    }
+
+    messageElement.innerHTML = `<div class="profile"></div>
             <div class="text" ${isRightSide && 'style="text-align:right"'}>${message}</div>`;
 
-        document.querySelector('#chat-messages').appendChild(messageElement);
-    }
+    document.querySelector('#chat-messages').appendChild(messageElement);
+}
 
-    function storeTheMessagesToLocalStorage(message, author) {
-        // Save the message to localStorage
-        const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-        messages.push({ name: author, message });
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
-    }
+function storeTheMessagesToLocalStorage(message, author) {
+    // Save the message to localStorage
+    const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+    messages.push({ name: author, message });
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+}
 
 
-    function getTheMessagesFromLocalStorage() {
-        return JSON.parse(localStorage.getItem('chatMessages')) || [];
-    }
+function getTheMessagesFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('chatMessages')) || [];
+}
 
-    // Call the function to inject the chatbot UI when the script is loaded
-    injectChatbotUI();
-</script>
+// Call the function to inject the chatbot UI when the script is loaded
+injectChatbotUI();
