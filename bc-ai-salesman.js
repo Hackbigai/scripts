@@ -297,7 +297,8 @@
             }
 
             // Send the request
-            fetch('https://cors-anywhere.herokuapp.com/https://6336-2409-40f3-22-f857-d98-4ea3-832e-77ef.ngrok-free.app/api/chat', {
+            // fetch('https://cors-anywhere.herokuapp.com/https://6336-2409-40f3-22-f857-d98-4ea3-832e-77ef.ngrok-free.app/api/chat', {
+            fetch('https://bc-ai-foundation.vercel.app/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
