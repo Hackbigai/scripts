@@ -1,4 +1,3 @@
-<script>
     // bc-ai-salesman.js
     console.log('inject chat bot .js')
     // Function to inject the chatbot UI HTML and CSS
@@ -382,4 +381,3 @@
 
     // Call the function to inject the chatbot UI when the script is loaded
     injectChatbotUI();
-</script>
