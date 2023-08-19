@@ -1,10 +1,10 @@
-
-// bc-ai-salesman.js
-console.log('inject chat bot')
-// Function to inject the chatbot UI HTML and CSS
-function injectChatbotUI() {
-    const chatbotStyle = document.createElement("style");
-    chatbotStyle.innerHTML = `
+<script>
+    // bc-ai-salesman.js
+    console.log('inject chat bot .js')
+    // Function to inject the chatbot UI HTML and CSS
+    function injectChatbotUI() {
+        const chatbotStyle = document.createElement("style");
+        chatbotStyle.innerHTML = `
     /* Add your CSS code here */
   <style>
     /* The chat UI wrapper */
@@ -48,7 +48,7 @@ function injectChatbotUI() {
         background-color: whitesmoke;
         border: 1px solid white;
         border-radius: 50%;
-        background-image: url("https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80");
+        background-image: url("https://img.freepik.com/premium-photo/cyborg-head-artificial-intelligence-3d-rendering_117023-271.jpg?w=740");
         background-position: center;
         background-size: cover;
     }
@@ -124,6 +124,15 @@ function injectChatbotUI() {
         border-radius: 50%;
         position: sticky;
         top: 8px;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .userAvatar{
+        background-image: url("https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1692215632~exp=1692216232~hmac=50654f18e9749e7a10b2bb912b0d4f42ce8f98eab96ba8f8e010825ef1b89689");
+    }
+    .AIavtar{
+        background-image: url("https://img.freepik.com/premium-photo/cyborg-head-artificial-intelligence-3d-rendering_117023-271.jpg?w=740");
     }
 
     #chatUi .chatbody .message .text {
@@ -225,8 +234,8 @@ function injectChatbotUI() {
   </style>
   `;
 
-    const chatbotDiv = document.createElement("div");
-    chatbotDiv.innerHTML = `
+        const chatbotDiv = document.createElement("div");
+        chatbotDiv.innerHTML = `
     <!-- Add your HTML code here -->
 <button id="chatBotButton" onclick="openChatUI()" style="position: fixed; bottom: 20px; right: 20px; background: linear-gradient(140deg, #282ddc 0%, #03bffd 100%); color: white; padding: 8px; border-radius: 8px; z-index: 9999;">
     Chat With Acme AI Salesman
@@ -267,108 +276,110 @@ function injectChatbotUI() {
     </form>
 </div>`;
 
-    document.head.appendChild(chatbotStyle);
-    document.body.appendChild(chatbotDiv);
+        document.head.appendChild(chatbotStyle);
+        document.body.appendChild(chatbotDiv);
 
-    const form = document.querySelector('#chat-form');
-    const chatInput = document.querySelector('#chat-input');
-    var isLoadingMessage = false;
+        const form = document.querySelector('#chat-form');
+        const chatInput = document.querySelector('#chat-input');
+        var isLoadingMessage = false;
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (isLoadingMessage) return
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (isLoadingMessage) return
 
-        isLoadingMessage = true;
-        const messageLoading = document.querySelector('#messageLoading');
-        const sendButton = document.querySelector('#sendbutton');
-        messageLoading.style.display = "block"
-        sendButton.style.display = "none"
+            isLoadingMessage = true;
+            const messageLoading = document.querySelector('#messageLoading');
+            const sendButton = document.querySelector('#sendbutton');
+            messageLoading.style.display = "block"
+            sendButton.style.display = "none"
 
-        const message = chatInput.value;
-        chatInput.value = '';
-        storeTheMessagesToLocalStorage(message, "user")
-        appendMessage(message, "user");
+            const message = chatInput.value;
+            chatInput.value = '';
+            storeTheMessagesToLocalStorage(message, "user")
+            appendMessage(message, "user");
 
 
-        // Prepare the body
-        var body = {
-            url: window.location.href,
-            chat: getTheMessagesFromLocalStorage()
-        }
+            // Prepare the body
+            var body = {
+                url: window.location.href,
+                chat: getTheMessagesFromLocalStorage()
+            }
 
-        // Send the request
-        fetch('https://bc-ai-foundation.vercel.app/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        })
-            .then(async (response) => response.json())
-            .then(result => {
-                isLoadingMessage = false
-                messageLoading.style.display = "none"
-                sendButton.style.display = "block"
-
-                storeTheMessagesToLocalStorage(result.replay, "AI-Salesman")
-                appendMessage(result.replay, "AI-Salesman")
+            // Send the request
+            fetch(`https://bc-ai-foundation.vercel.app/api/chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
             })
-            .catch(error => {
-                console.log('error', error)
+                .then(async (response) => response.json())
+                .then(result => {
+                    isLoadingMessage = false
+                    messageLoading.style.display = "none"
+                    sendButton.style.display = "block"
 
-                isLoadingMessage = false
-                messageLoading.style.display = "none"
-                sendButton.style.display = "block"
-            });
+                    storeTheMessagesToLocalStorage(result.replay, "AI-Salesman")
+                    appendMessage(result.replay, "AI-Salesman")
+                })
+                .catch(error => {
+                    console.log('error', error)
 
-    });
+                    isLoadingMessage = false
+                    messageLoading.style.display = "none"
+                    sendButton.style.display = "block"
+                });
 
-}
+        });
 
-
-function openChatUI() {
-    const chatUi = document.getElementById("chatUi");
-    const chatbotButton = document.getElementById("chatBotButton");
-
-    chatUi.style.display = "block"
-    chatbotButton.style.display = "none"
-}
-
-function closeChatUI() {
-    const chatUi = document.getElementById("chatUi");
-    const chatbotButton = document.getElementById("chatBotButton");
-
-    chatUi.style.display = "none"
-    chatbotButton.style.display = "block"
-}
-
-function appendMessage(message, author = "AI-Salesman") {
-
-    const isRightSide = author == "user";
-
-    const messageElement = document.createElement('div');
-    messageElement.className = "message"
-    if (isRightSide) {
-        messageElement.style.flexDirection = "row-reverse"
     }
 
-    messageElement.innerHTML = `<div class="profile"></div>
+
+    function openChatUI() {
+        const chatUi = document.getElementById("chatUi");
+        const chatbotButton = document.getElementById("chatBotButton");
+
+        chatUi.style.display = "block"
+        chatbotButton.style.display = "none"
+    }
+
+    function closeChatUI() {
+        const chatUi = document.getElementById("chatUi");
+        const chatbotButton = document.getElementById("chatBotButton");
+
+        chatUi.style.display = "none"
+        chatbotButton.style.display = "block"
+    }
+
+    function appendMessage(message, author = "AI-Salesman") {
+
+        const isRightSide = author == "user";
+
+        const messageElement = document.createElement('div');
+        messageElement.className = "message"
+        if (isRightSide) {
+            messageElement.style.flexDirection = "row-reverse"
+        }
+
+
+        messageElement.innerHTML = `<div class="profile ${isRightSide ? 'userAvatar' : 'AIavtar'}"></div>
             <div class="text" ${isRightSide && 'style="text-align:right"'}>${message}</div>`;
 
-    document.querySelector('#chat-messages').appendChild(messageElement);
-}
+        document.querySelector('#chat-messages').appendChild(messageElement);
+    }
 
-function storeTheMessagesToLocalStorage(message, author) {
-    // Save the message to localStorage
-    const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    messages.push({ name: author, message });
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
-}
+    function storeTheMessagesToLocalStorage(message, author) {
+        // Save the message to localStorage
+        const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+        messages.push({ name: author, message });
+        localStorage.setItem('chatMessages', JSON.stringify(messages));
+    }
 
 
-function getTheMessagesFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('chatMessages')) || [];
-}
+    function getTheMessagesFromLocalStorage() {
+        return JSON.parse(localStorage.getItem('chatMessages')) || [];
+    }
 
-// Call the function to inject the chatbot UI when the script is loaded
-injectChatbotUI();
+    // Call the function to inject the chatbot UI when the script is loaded
+    injectChatbotUI();
+</script>
